@@ -1,10 +1,68 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Algoritma DDA</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+            width: 512px;
+            height: 512px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Halo</h1>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Menentukan warna garis
+        const strokeColor = "#ff0000";
+
+        // Menambahkan event listener untuk klik pada kanvas
+        canvas.addEventListener("dblclick", (event) => {
+            // Mendapatkan koordinat klik
+            const x1 = event.clientX - canvas.getBoundingClientRect().left;
+            const y1 = event.clientY - canvas.getBoundingClientRect().top;
+
+            // Meminta koordinat tujuan
+            let x2, y2;
+            do {
+                x2 = parseInt(prompt("Masukkan koordinat X tujuan: "));
+                y2 = parseInt(prompt("Masukkan koordinat Y tujuan: "));
+            } while (isNaN(x2) || isNaN(y2));
+
+            // Menggambar garis menggunakan algoritma DDA
+            dda(x1, y1, x2, y2, strokeColor);
+        });
+
+        // Algoritma DDA
+        function dda(x1, y1, x2, y2, strokeColor) {
+            // Menghitung langkah
+            const dx = Math.abs(x2 - x1);
+            const dy = Math.abs(y2 - y1);
+            const steps = Math.max(dx, dy);
+
+            // Menghitung kenaikan per langkah
+            const xInc = (x2 - x1) / steps;
+            const yInc = (y2 - y1) / steps;
+
+            // Menggambar garis
+            let x = x1;
+            let y = y1;
+            for (let i = 0; i <= steps; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + xInc, y + yInc);
+                ctx.strokeStyle = strokeColor;
+                ctx.stroke();
+
+                x += xInc;
+                y += yInc;
+            }
+        }
+    </script>
 </body>
 </html>
