@@ -22,20 +22,24 @@
         const strokeColor = "#ff0000";
 
         // Menambahkan event listener untuk klik pada kanvas
-        canvas.addEventListener("dblclick", (event) => {
-            // Mendapatkan koordinat klik
-            const x1 = event.clientX - canvas.getBoundingClientRect().left;
-            const y1 = event.clientY - canvas.getBoundingClientRect().top;
+        let isDrawing = false;
+        let x1, y1;
+        canvas.addEventListener("click", (event) => {
+            if (!isDrawing) {
+                // Mendapatkan koordinat klik pertama
+                x1 = event.clientX - canvas.getBoundingClientRect().left;
+                y1 = event.clientY - canvas.getBoundingClientRect().top;
+                isDrawing = true;
+            } else {
+                // Mendapatkan koordinat klik kedua
+                const x2 = event.clientX - canvas.getBoundingClientRect().left;
+                const y2 = event.clientY - canvas.getBoundingClientRect().top;
 
-            // Meminta koordinat tujuan
-            let x2, y2;
-            do {
-                x2 = parseInt(prompt("Masukkan koordinat X tujuan: "));
-                y2 = parseInt(prompt("Masukkan koordinat Y tujuan: "));
-            } while (isNaN(x2) || isNaN(y2));
+                // Menggambar garis menggunakan algoritma DDA
+                dda(x1, y1, x2, y2, strokeColor);
 
-            // Menggambar garis menggunakan algoritma DDA
-            dda(x1, y1, x2, y2, strokeColor);
+                isDrawing = false;
+            }
         });
 
         // Algoritma DDA
